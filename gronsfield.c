@@ -5,9 +5,15 @@
 /*
  * busca caracteres!=numeros
  */
+
 /*
  * verifica si en la cadena de caracteres perteneciente a la clave de la encriptación existen caracteres
  * diferentes a números
+ * recibe:
+ * char *sms-->tercer argumento que contiene a los numeros clave
+ * retorna:
+ * 0-->si el programa se ejecuto correctamente
+ * 1-->si ocurrio un error
  */
 int verNum(char *sms)
 {
@@ -32,23 +38,31 @@ int contarChar(int tam) //tamaño de argv[i]
 	for (int i=0; i<tam; i++)
 		cant+=1;
 
-	return cant;
+	return cant; //retorna la cantidad de caracteres que se encuentran en la linea
 }
 
 /*
  * recibe la clave de desencriptación y el mensaje a desencriptar
  * va sumando cada caracter con su respectivo par numérico
  * como indica el método Gronsfeld.
+ * recibe:
+ * sms--> el mensaje que desea desencriptar 
+ * numEncrip--> la clave de numeros que se tienen que utilizar para encriptar el mensaje 
+ * retorna:
+ * la nueva cadena encriptada
  */
 void desencriptar(char *sms, char *numEncrip)
 {
 	//Aquí se implementa el código para desencriptar
 }
-
 /*
- * funcion que convierte un array de caracteres en un string
- */
-char* transString(char* arr)
+funcion encargada de transformar el array del argumento en una string 
+recibe:
+arr--> array de caracteres perteneciente a la clave numerica
+retorna:
+str--> la clave numerica transformada en string
+*/
+char* transString(char* arr) 
 {
     int length = strlen(arr);
     char* str = (char*)malloc(length + 1); // reservar memoria para la cadena
@@ -63,19 +77,21 @@ char* transString(char* arr)
 /*
  * recibe la clave de encriptación y el mensaje a encriptar
  * va sumando cada caracter con su respectivo par numérico
- * como indica el método Gronsfeld.
+ * como indica el método Gronsfeld.\
+ * recibe:
+ * sms--> el mensaje a ser encriptado 
+ * numEncrip--> la clave numerica
+ * retorna:
+ * no retorna nada, simplemente imprime el mensaje ingresado ahora escriptado
  */
 void encriptar(char *sms, char *numEncrip) //recibe argv[i+1], argv[i]
 {
-	char *str=transString(numEncrip);
-	char *ban=str;
+	char *str=transString(numEncrip);//transforma el array de la clave numerica para a string para poder usar atoi
     int tam = strlen(sms); //ingresa el tamaño de sms
     char a[tam + 1]; //crea vector para imprimir mensaje codificado
 
-    for (int i = 0; i < tam; i++)
-    {
-		printf("%s,%s",sms[i],ban[i])//rificar valores 
-        a[i]= sms[i] + ban[i] ; //se pueden sumar caracteres con números
+    for (int i = 0; i < tam; i++) {
+        a[i]= sms[i] + atoi(str) ; //se pueden sumar caracteres con números
     }
 
     printf("El mensaje encriptado queda: %s\n", a);
@@ -91,23 +107,22 @@ void encriptar(char *sms, char *numEncrip) //recibe argv[i+1], argv[i]
 
 int main(int argc, char **argv)
 {
-	if (verNum(argv[2])==1) return 0;
-	printf("%s,%s",argv[2],argv[3]);//para verificar valores 
+	if (verNum(argv[2])==1) return 0; //verifica si la clave consta de unicamente numeros, de lo contrario termina el programa
 	if (contarChar(strlen(argv[2]))!=contarChar(strlen(argv[3]))) //verifica tamaño
 	{
 		printf("Número de clave diferente al número de mensaje\n");
 		return 0;
 	}
 
-	if (*argv[1]=='c')
+	if (*argv[1]=='c')// si argv[1] es c, ejecuta la funcion de encriptar
 	{
 		encriptar(argv[3], argv[2]);
 	}
-	else if (*argv[1]=='d')
+	else if (*argv[1]=='d')// si argv[1] es d, ejecuta la funcion de desencriptar
 	{
 		desencriptar(argv[3], argv[2]);
 	}
-	else
+	else//si el usuario ingresa cualquier otro caracter se avisa el error y termina el programa 
 	{
 		printf("Opción inválida\n");
 		return 0;
