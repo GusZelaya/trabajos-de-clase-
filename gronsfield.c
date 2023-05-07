@@ -119,7 +119,9 @@ void encriptar(char *sms, char *numEncrip)
     char a[tam]; //crea vector para imprimir mensaje codificado
 
     for (int i = 0; i < tam; i++) {
+		printf("%c,%c\n",sms[i],numEncrip[i]);
         a[i]= sms[i] + numEncrip[i]-48 ; //se pueden sumar caracteres con números, 48 valor numerico del caracter 0
+		printf("%c\n",a[i]);
     }
 
     printf("El mensaje encriptado queda: %s\n", a);
