@@ -44,7 +44,6 @@ int contarChar(int tam) //tamaño de argv[i]
 funcion encargada de crear el vector con la clave numerica
 len-->tama;o de la cadena de argumentos concatenada
 clave-->clave numerica para el cifrado
-
 nota: por el planteamiento del problema en el tp el usuario puede ingresar una clave numerica de menor cantidad de caracteres que el mensaje que
 quiere encriptar, de ser este el caso, tenemos que crear un bucle para que se llenen los espacios de la clave numerica con los numeros que ingreso el
 usuario.
@@ -75,34 +74,21 @@ a r t r i t i s
  * --> los valores de clave no se cargan correctamente en aaa
  * --> si strlen(aaa)>strlen(clave) no se cargan los valores correctamente en el bucle
  * --> no se retorna aaa de la manera correcta
- * --> en el mejor de los casos, no llega claveNum a la funcion encriptar, de manera correcta
+ * --> en el mejor de los casos, no llega wololo a la funcion encriptar, de manera correcta
  *
- * 		chequear el valor de claveNum para revisar si se soluciona o no el problema
+ * 		chequear el valor de wololo para revisar si se soluciona o no el problema
  */
-char *clave01(int len,char *clave)
-{
-	int ban1=0;	//variables para ir llenando el vector si hace falta
-	int ban2=1;//
-	char *aaa=malloc(len*sizeof(char));//se crea un vector de tama;o igual a el mensaje a cifrar
-	for(int i=0;i<strlen(aaa);i++)	//se carga el primer ciclo de la clave numerica
-								   //si la strlen(clave)==strlen(mensaje a cifrar) la funcion termina
-		aaa[i]=clave[i];
-		/*
-		si el ultimo espacio del vector creado se encuentra con un valor distinto a un numero es por que el mensaje y la clave
-		no son del mismo tama;o, por ende se necesita ciclar la clave numerica para poder hacer el encriptado
-		*/
-	while(1)
-	{
-		if(aaa[len-1]<'0' || aaa[len-1]>'9')    //se revisa el valor del ultimo espacio del vector
-			aaa[strlen(clave)+ban2]=clave[ban1];	// si condicion verdadera se carga el primer siguiente valor de la clave numerica
-		if(aaa[len-1]>'0' || aaa[len-1]<'9')	//si la condicion no se cumple (el ultimo espacio del vector es un valor correcto)
-		{													//se corta el ciclo while
-			break;
-		}
-		ban1++;
-		ban2++;
-	}
-	return aaa;
+char* clave01(int len, const char* clave) {
+    char* aaa = malloc(len + 1); // Se crea un vector de tamaño igual al mensaje a cifrar más uno para el caracter nulo.
+    int clave_len = strlen(clave);
+
+    // Si la longitud de la clave es menor que la longitud del mensaje a cifrar, se repite la clave.
+    for (int i = 0; i < len; i++) {
+        aaa[i] = clave[i % clave_len]; // Se utiliza el operador módulo (%) para obtener el índice de la clave correspondiente.
+    }
+    aaa[len] = '\0'; // Se agrega el caracter nulo al final del vector.
+	printf("\n%s\n",aaa);
+    return aaa;
 }
 /*
  * recibe la clave de desencriptación y el mensaje a desencriptar
@@ -116,7 +102,14 @@ char *clave01(int len,char *clave)
  */
 void desencriptar(char *sms, char *numEncrip)
 {
-	//Aquí se implementa el código para desencriptar
+	int tam = strlen(sms);//ingresa el tamaño de sms
+	char a[tam];//crea vector para imprimir mensaje decodificado
+	for (int i = 0; i<tam; i++){
+		printf("sms:%c,num:%c",sms[i],numEncrip[i]);
+		a[i]= sms[i] - numEncrip[i] + 48;//se restar caracteres con números, 48 valor numerico del caracter 0
+		printf("val.a:%c \n",a[i]);
+	}
+	printf ("El mensaje desencriptado es: %s\n",a);
 }
 /*
 funcion encargada de transformar el array del argumento en una string
@@ -162,7 +155,7 @@ void encriptar(char *sms, char *numEncrip)
 
     for (int i = 0; i < tam; i++) {
 		printf("sms:%c,num:%c",sms[i],numEncrip[i]);
-        a[i]= sms[i] + numEncrip[i]-48 ; //se pueden sumar caracteres con números, 48 valor numerico del caracter 0
+        a[i]= sms[i] + numEncrip[i]- 48 ; //se pueden sumar caracteres con números, 48 valor numerico del caracter 0
 		printf("val.a:%c \n",a[i]);
     }
 
@@ -183,7 +176,6 @@ crear un vector del tama;o obtenido
 cargar el numero clave dentro de ese vector para realizar la encriptacion
 pasar la concatenacion a encriptar
 pasar la concatenacion de la clave numerica a encriptar
-
 */
 int main(int argc, char **argv)
 {
@@ -196,11 +188,11 @@ int main(int argc, char **argv)
 			strcat(ayoyo," ");
 	}
 	int tamCad=contarChar(strlen(ayoyo));
-	char *claveNum=clave01(tamCad,argv[2]);
+	char *wololo=clave01(tamCad,argv[2]);
 	if (*argv[1]=='c')// si argv[1] es c, ejecuta la funcion de encriptar
-		encriptar(ayoyo, claveNum);
+		encriptar(ayoyo, wololo);
 	else if (*argv[1]=='d')// si argv[1] es d, ejecuta la funcion de desencriptar
-		desencriptar(ayoyo, claveNum);
+		desencriptar(ayoyo, wololo);
 	else//si el usuario ingresa cualquier otro caracter se avisa el error y termina el programa
 	{
 		printf("Opción inválida\n");
@@ -209,4 +201,3 @@ int main(int argc, char **argv)
 
 	return 0;
 }
-
