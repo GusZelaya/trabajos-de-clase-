@@ -50,6 +50,7 @@ int main(int agrc,char **argv)
 					printf("Error\n");
 					return 0;
 				}
+				//if()
 				do{
 				fwrite(str,1,bytes,Fotos);
 				tamano+=bytes;
@@ -66,7 +67,7 @@ int main(int agrc,char **argv)
 			}
 		}
 	}
-	printf("cantidad de fotos recuperadas: %d\n tamano total: %d\n",cant,tamtotal);
+	printf("cantidad de fotos recuperadas: %d\n tamano total: %d\n bytes",cant,tamtotal);
 	fclose(Archivo);
 	return 0;
 }
