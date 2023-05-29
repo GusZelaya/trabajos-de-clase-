@@ -31,7 +31,8 @@ int main(int agrc,char **argv)
 	char *destino=argv[2];
 	FILE * Archivo=NULL;
 	FILE * Fotos=NULL;
-	int tamano,tamtotal,cant,bandera=0;
+	int tamano,tamtotal,bandera=0;
+	unsigned int cant=0;
 	char str[512];
 	if((Archivo=fopen(ruta,"r"))==NULL)
 	{
@@ -44,8 +45,11 @@ int main(int agrc,char **argv)
 		{
 			if(strncmp(str,titulo1,4)==0||strncmp(str,titulo2,4)==0)
 			{
+				bandera++;
+				do
+				{
 				cant++;
-				if((Fotos=fopen(nombres(destino,cant),"w"))==NULL)
+				while((Fotos=fopen(nombres(destino,cant),"w"))==NULL)
 				{
 					printf("Error\n");
 					return 0;
@@ -58,16 +62,19 @@ int main(int agrc,char **argv)
 				fread(str,1,bytes,Archivo);
 				if(strncmp(str,titulo1,4)==0||strncmp(str,titulo2,4)==0)
 				{
+					bandera++;
 					break;
 				}
 				}while(1);
 				printf("foto %d.jpg\ttamano: %d\n",cant,tamano);
 				tamano=0;
 				fclose(Fotos);
+				}while(bandera<31);
+				break;
 			}
 		}
 	}
-	printf("cantidad de fotos recuperadas: %d\n tamano total: %d\n bytes",cant,tamtotal);
+	printf("cantidad de fotos recuperadas: %d\n tamano total: %d bytes",cant,tamtotal);
 	fclose(Archivo);
 	return 0;
 }
