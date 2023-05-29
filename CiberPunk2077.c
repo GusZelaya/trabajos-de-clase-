@@ -10,7 +10,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h>
 char * nombres(char * ruta,int n)
 {
 	printf("j");
@@ -18,7 +18,9 @@ char * nombres(char * ruta,int n)
 	sprintf (str,"%s/foto %d.jpg",ruta,n);
 	return(str);
 }
-//(Estas son las rutas en mi maquina)
+
+char titulo1[]={0xff,0xd8,0xff,0xe0};
+char titulo2[]={0xff,0xd8,0xff,0xe1};
 //claves: 0xff 0xd8 0xff 0xe0,0xff 0xd8 0xff 0xe1
 //RUTA:/home/lp1-2023/Descargas/Fotos.raw
 //destino:/home/lp1-2023/Escritorio/tareas de la clase
@@ -42,19 +44,20 @@ int main(int agrc,char **argv)
 	{
 		for(;fread(str,1,bytes,Archivo)==bytes;)
 		{
-			if(str[0]==0xff && str[1]==0xd8 && str[2]==0xff && (str[3]==0xe0 || str[3]==0xe1))
+			if(strncmp(str,titulo1,4)==0||strncmp(str,titulo2,4)==0)
 			{
+				cant++;
 				if((Fotos=fopen(nombres(destino,cant),"w"))==NULL)
 				{
 					printf("Error\n");
 					return 0;
 				}
 				do{
-        cant++;
 				fwrite(str,1,bytes,Fotos);
 				tamano+=bytes;
 				tamtotal+=bytes;
-				}while(str[0]!=0xff || str[1]!=0xd8 || str[2]!=0xff || (str[3]!=0xe0 || str[3]!=0xe1));
+				fread(str,1,bytes,Archivo);
+				}while(strncmp(str,titulo1,4)!=0||strncmp(str,titulo2,4)!=0);
 				printf("foto %d\t.jpg tamano: %d\n",cant,tamano);
 				tamano=0;
 				fclose(Fotos);
