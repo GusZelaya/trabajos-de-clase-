@@ -13,7 +13,6 @@
 #include <string.h>
 char * nombres(char * ruta,int n)
 {
-	printf("j");
 	static char str[700];
 	sprintf (str,"%s/foto %d.jpg",ruta,n);
 	return(str);
@@ -32,9 +31,8 @@ int main(int agrc,char **argv)
 	char *destino=argv[2];
 	FILE * Archivo=NULL;
 	FILE * Fotos=NULL;
-	int tamano,tamtotal,cant=0;
+	int tamano,tamtotal,cant,bandera=0;
 	char str[512];
-	printf("a");
 	if((Archivo=fopen(ruta,"r"))==NULL)
 	{
 		printf("Error\n");
@@ -57,14 +55,17 @@ int main(int agrc,char **argv)
 				tamano+=bytes;
 				tamtotal+=bytes;
 				fread(str,1,bytes,Archivo);
-				}while(strncmp(str,titulo1,4)!=0||strncmp(str,titulo2,4)!=0);
-				printf("foto %d\t.jpg tamano: %d\n",cant,tamano);
+				if(strncmp(str,titulo1,4)==0||strncmp(str,titulo2,4)==0)
+				{
+					break;
+				}
+				}while(1);
+				printf("foto %d.jpg\ttamano: %d\n",cant,tamano);
 				tamano=0;
 				fclose(Fotos);
 			}
 		}
 	}
-	//
 	printf("cantidad de fotos recuperadas: %d\n tamano total: %d\n",cant,tamtotal);
 	fclose(Archivo);
 	return 0;
