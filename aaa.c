@@ -1,4 +1,5 @@
- La empresa LP S.A. solicitó crear un programa para gestionar una agenda de clientes, debe contar con una base de datos
+/*
+La empresa LP S.A. solicitó crear un programa para gestionar una agenda de clientes, debe contar con una base de datos
 
 que contenga los siguientes campos:
 
@@ -22,7 +23,7 @@ primera vez que se ejecute el programa e ir actualizando cada vez que se agregue
 
 #include <stdio.h>
 #include <stdlib.h>
-#define archivo "/home/lp1-2023/Escritorio/aaa"
+#define archivo "/home/lp1-2023/Escritorio/locurazelaya"
 #define encabezado "               base de datos de la empresa"
 
 FILE *Archivo=NULL;
@@ -51,18 +52,18 @@ int main(void) {
 			break;
 		case 1:
 			cliente a;
-			printf ("Ingrese\n");
-			printf("Nombre:\n");
+			printf ("Ingrese ");
+			printf("Nombre:");
 			scanf("%s",a.nombre);
-			printf ("Direccion:\n");
+			printf ("Direccion:");
 			scanf("%s",a.direccion);
-			printf("Nmero de telefono:\n");
+			printf("Nmero de telefono:");
 			scanf("%d",&a.telefono);
-			printf ("Deuda a pagar:\n");
+			printf ("Deuda a pagar:");
 			scanf("%f",&a.estado_pago);
 			if((Archivo=fopen(archivo,"w"))==NULL)
 			{
-				fwrite(encabezado,1,sizeof(cliente),Archivo);
+				fwrite(encabezado,1,80,Archivo);
 				fclose(Archivo);
 			}
 			fwrite(&a,1,sizeof(a),Archivo);
@@ -75,11 +76,12 @@ int main(void) {
 				printf("Error al abrir la carpeta de estadisticas para la lectura \n");
 			}
 			while(feof(Archivo)==0){
-				fread(v,1,80,Archivo);
+				fread(v,1,sizeof(cliente),Archivo);
 				printf("%s",v);
-				fclose(Archivo);
 			}
-		}break;
+			fclose(Archivo);
+			break;
+		}
 	}while(valor!=0);
 	return EXIT_SUCCESS;
 }
