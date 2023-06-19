@@ -1,30 +1,7 @@
-/*
-La empresa LP S.A. solicitó crear un programa para gestionar una agenda de clientes, debe contar con una base de datos
-
-que contenga los siguientes campos:
-
-
-“nombre (50 caracteres)”,
-
-“dirección (100 caracteres)”,
-“teléfono (entero sin signo)”,
-
-“estado_pagos (float con signo)”.
-
-
-El estado de pagos será un número negativo indicando la cantidad de dinero que debe el cliente.
-El programa debe presentar al usuario un menú con las siguientes opciones:
-1) Agregar cliente.
-
-2) ver datos de todos los clientes.
-El programa trabajará con un archivo (clientes.db por ejemplo) que debe crear la
-primera vez que se ejecute el programa e ir actualizando cada vez que se agregue un nuevo cliente con el menú.
- */
-
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #define archivo "/home/lp1-2023/Escritorio/locurazelaya"
-#define encabezado "               base de datos de la empresa"
 
 FILE *Archivo=NULL;
 
@@ -39,9 +16,8 @@ struct empresa{
 int main(void) {
 	int valor;
 	typedef struct empresa cliente;
-	char v[80];
+	cliente data;
 	printf("Bienvenido al menu de LP S.A\n");
-
 	do{
 		printf ("Agregar cliente -> 1\n");
 		printf("Ver datos de clienmtes -> 2\n");
@@ -61,12 +37,8 @@ int main(void) {
 			scanf("%d",&a.telefono);
 			printf ("Deuda a pagar:");
 			scanf("%f",&a.estado_pago);
-			if((Archivo=fopen(archivo,"w"))==NULL)
-			{
-				fwrite(encabezado,1,80,Archivo);
-				fclose(Archivo);
-			}
-			fwrite(&a,1,sizeof(a),Archivo);
+			Archivo=fopen(archivo,"a");
+			fwrite(&a,sizeof(cliente),1,Archivo);
 			fclose(Archivo);
 			break;
 		case 2:
@@ -75,13 +47,15 @@ int main(void) {
 				//se abre el archivo de estadisticas en modo lectura y escritura
 				printf("Error al abrir la carpeta de estadisticas para la lectura \n");
 			}
-			while(feof(Archivo)==0){
-				fread(v,1,sizeof(cliente),Archivo);
-				printf("%s",v);
-			}
+			do{
+				if((fread(&data,sizeof(cliente),1,Archivo))!=1)
+					break;
+				printf("nombre:%s  direccion: %s  Num: %d deuda: %f \n",data.nombre,data.direccion,data.telefono,data.estado_pago);
+			}while(feof(Archivo)==0);
 			fclose(Archivo);
 			break;
 		}
+		break;
 	}while(valor!=0);
 	return EXIT_SUCCESS;
 }
